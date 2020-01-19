@@ -24,6 +24,18 @@ if [ -z "$CURLPATH" ]; then
     exit 1
 fi
 
+# define version using information from GitHub
+get_latest_release() {
+  curl --silent "https://api.github.com/repos/redlineal/amghost/releases/latest" | # Get latest release from GitHub api
+    grep '"tag_name":' |                                            # Get tag line
+    sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
+}
+
+echo "* Retrieving release information.."
+VERSION="$(get_latest_release "redlineal/amghost")"
+
+echo "* Latest version is $VERSION"
+
 # variables
 WEBSERVER="nginx"
 FQDN="amghost.panel"
@@ -67,7 +79,7 @@ function detect_distro {
     # freedesktop.org and systemd
     . /etc/os-release
     OS=$(echo "$ID" | awk '{print tolower($0)}')
-    OS_VER=v1.0_ID
+    OS_VER=$VERSION_ID
   elif type lsb_release >/dev/null 2>&1; then
     # linuxbase.org
     OS=$(lsb_release -si | awk '{print tolower($0)}')
