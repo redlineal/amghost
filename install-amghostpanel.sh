@@ -1,16 +1,4 @@
 #!/bin/bash
-
-########################################################################
-#                                                                      #
-# Project 'amghost-installer' for panel                            #
-#                                                                      #
-# Copyright (C) 2020, Lirim ZM, <lirimzm@yahoo.com>      #
-#                                                                      #
-# https://fb.com/lirim.zm.1                #
-#                                                                      #
-########################################################################
-
-# exit with error status code if user is not root
 if [[ $EUID -ne 0 ]]; then
   echo "* This script must be executed with root privileges (sudo)." 1>&2
   exit 1
