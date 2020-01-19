@@ -2,11 +2,11 @@
 
 ########################################################################
 #                                                                      #
-# Project 'amghost-installer' for panel                            #
+# Project 'amghost-installer' for panel                                #
 #                                                                      #
-# Copyright (C) 2020, Lirim ZM, <lirimzm@yahoo.com>      #
+# Copyright (C) 2020, Lirim ZM, <lirimzm@yahoo.com>                    #
 #                                                                      #
-# https://fb.com/lirim.zm.1                #
+# https://fb.com/lirim.zm.1                                            #
 #                                                                      #
 ########################################################################
 
@@ -26,7 +26,7 @@ fi
 
 # define version using information from GitHub
 get_latest_release() {
-  curl --silent "https://api.github.com/repos/redlineal/amghost/releases/latest" | # Get latest release from GitHub api
+  curl --silent "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub api
     grep '"tag_name":' |                                            # Get tag line
     sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
 }
@@ -61,7 +61,7 @@ function print_error {
   COLOR_NC='\033[0m'
 
   echo ""
-  echo -e "* ${COLOR_RED}ERROR${COLOR_NC}: redlineal/amghost"
+  echo -e "* ${COLOR_RED}ERROR${COLOR_NC}: $1"
   echo ""
 }
 
