@@ -24,12 +24,17 @@ if [ -z "$CURLPATH" ]; then
     exit 1
 fi
 
-echo "Identifying latest version"
-version=$(curl -s https://api.github.com/repos/redlineal/amghost/releases/latest| grep "tag_name" | cut -d : -f 2,3 | tr -d \"\ ,v)
-echo "Latest version is $version"
+# define version using information from GitHub
+get_latest_release() {
+  curl --silent "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub api
+    grep '"tag_name":' |                                            # Get tag line
+    sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
+}
 
-# If you want, force a version here
-# version=1.1.9
+echo "* Retrieving release information.."
+VERSION="$(get_latest_release "redlineal/amghost")"
+
+echo "* Latest version is $VERSION"
 
 # variables
 WEBSERVER="nginx"
