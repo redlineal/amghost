@@ -34,11 +34,11 @@ get_latest_release() {
 echo "* Retrieving release information.."
 VERSION="$(get_latest_release "redlineal/amghost")"
 
-echo "* Latest version is v1.0"
+echo "* Latest version is $VERSION"
 
 # variables
 WEBSERVER="nginx"
-FQDN="redlineal/amghost"
+FQDN="amghost.panel"
 
 # default MySQL credentials
 MYSQL_DB="amghost"
