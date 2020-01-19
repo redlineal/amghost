@@ -61,7 +61,7 @@ function print_error {
   COLOR_NC='\033[0m'
 
   echo ""
-  echo -e "* ${COLOR_RED}ERROR${COLOR_NC}: $1"
+  echo -e "* ${COLOR_RED}ERROR${COLOR_NC}: redlineal/amghost"
   echo ""
 }
 
