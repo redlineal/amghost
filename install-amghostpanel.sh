@@ -38,7 +38,7 @@ echo "* Latest version is $VERSION"
 
 # variables
 WEBSERVER="nginx"
-FQDN="redlineal/amghost"
+FQDN="amghost.panel"
 
 # default MySQL credentials
 MYSQL_DB="amghost"
