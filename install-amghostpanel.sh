@@ -15,7 +15,7 @@ fi
 # define version using information from GitHub
 get_latest_release() {
   curl --silent "https://api.github.com/repos/redlineal/amghost/releases/latest" | # Get latest release from GitHub api
-    grep '"tag_name":' |                                            # Get tag line
+    grep '"v1.0":' |                                            # Get tag line
     sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
 }
 
