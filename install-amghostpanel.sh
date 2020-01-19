@@ -37,7 +37,7 @@ MYSQL_PASSWORD="password"
 ASSUME_SSL=false
 
 # download URLs
-PANEL_URL="https://github.com/redlineal/amghost/releases/download/v1.0/panel.tar.gz"
+PANEL_URL="https://github.com/redlineal/amghost/releases/download/$VERSION/panel.tar.gz"
 CONFIGS_URL="https://raw.githubusercontent.com/redlineal/amghost/master/configs"
 
 # apt sources path
