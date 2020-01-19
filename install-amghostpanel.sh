@@ -1,4 +1,16 @@
 #!/bin/bash
+
+########################################################################
+#                                                                      #
+# Project 'amghost-installer' for panel                            #
+#                                                                      #
+# Copyright (C) 2020, Lirim ZM, <lirimzm@yahoo.com>      #
+#                                                                      #
+# https://fb.com/lirim.zm.1                #
+#                                                                      #
+########################################################################
+
+# exit with error status code if user is not root
 if [[ $EUID -ne 0 ]]; then
   echo "* This script must be executed with root privileges (sudo)." 1>&2
   exit 1
@@ -12,19 +24,16 @@ if [ -z "$CURLPATH" ]; then
     exit 1
 fi
 
-# define version using information from GitHub
-get_latest_release() {
-  curl --silent "https://api.github.com/repos/redlineal/amghost/releases/latest" | # Get latest release from GitHub api
-    grep '"v1.0":' |                                            # Get tag line
-    sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
-}
+echo "Identifying latest version"
+version=$(curl -s https://api.github.com/repos/redlineal/amghost/releases/latest| grep "tag_name" | cut -d : -f 2,3 | tr -d \"\ ,v)
+echo "Latest version is $version"
 
-echo "* Retrieving release information.."
-echo "* Latest version is $VERSION"
+# If you want, force a version here
+# version=1.1.9
 
 # variables
 WEBSERVER="nginx"
-FQDN="amghost.panel"
+FQDN="redlineal/amghost"
 
 # default MySQL credentials
 MYSQL_DB="amghost"
@@ -35,7 +44,7 @@ MYSQL_PASSWORD="password"
 ASSUME_SSL=false
 
 # download URLs
-PANEL_URL="https://github.com/redlineal/amghost/releases/download/$VERSION/panel.tar.gz"
+PANEL_URL="https://github.com/redlineal/amghost/releases/download/v1.0/panel.tar.gz"
 CONFIGS_URL="https://raw.githubusercontent.com/redlineal/amghost/master/configs"
 
 # apt sources path
