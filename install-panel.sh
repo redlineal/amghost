@@ -34,7 +34,7 @@ get_latest_release() {
 echo "* Retrieving release information.."
 VERSION="$(get_latest_release "amghost/panel")"
 
-echo "* Latest version is 2020"
+echo "* Latest version is v1.0"
 
 # variables
 WEBSERVER="nginx"
@@ -49,8 +49,8 @@ MYSQL_PASSWORD="password"
 ASSUME_SSL=false
 
 # download URLs
-PANEL_URL="http://185.186.244.224/panel-2020.tar.gz"
-CONFIGS_URL="https://raw.githubusercontent.com/VilhelmPrytz/pterodactyl-installer/master/configs"
+PANEL_URL="https://github.com/redlineal/amghost/releases/download/v1.0/panel.tar.gz"
+CONFIGS_URL="https://raw.githubusercontent.com/redlineal/amghost/master/configs"
 
 # apt sources path
 SOURCES_PATH="/etc/apt/sources.list"
