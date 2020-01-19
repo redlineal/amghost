@@ -2,11 +2,13 @@
 
 ########################################################################
 #                                                                      #
-# Project 'amghost-installer' for panel                            #
+# Project 'pterodactyl-installer' for panel                            #
 #                                                                      #
-# Copyright (C) 2020, Lirim ZM, <lirimzm@yahoo.com>      #
+# Copyright (C) 2018 - 2019, Vilhelm Prytz, <vilhelm@prytznet.se>      #
 #                                                                      #
-# https://fb.com/lirim.zm.1                #
+# This script is not associated with the official Pterodactyl Project. #
+# Please use at your own risk.                                         #
+# https://github.com/VilhelmPrytz/pterodactyl-installer                #
 #                                                                      #
 ########################################################################
 
@@ -32,25 +34,25 @@ get_latest_release() {
 }
 
 echo "* Retrieving release information.."
-VERSION="$(get_latest_release "amghost/panel")"
+VERSION="$(get_latest_release "pterodactyl/panel")"
 
-echo "* Latest version is v1.0"
+echo "* Latest version is $VERSION"
 
 # variables
 WEBSERVER="nginx"
-FQDN="amghost.panel"
+FQDN="pterodactyl.panel"
 
 # default MySQL credentials
-MYSQL_DB="amghost"
-MYSQL_USER="amghost"
+MYSQL_DB="pterodactyl"
+MYSQL_USER="pterodactyl"
 MYSQL_PASSWORD="password"
 
 # assume SSL, will fetch different config if true
 ASSUME_SSL=false
 
 # download URLs
-PANEL_URL="https://github.com/redlineal/amghost/releases/download/v1.0/panel.tar.gz"
-CONFIGS_URL="https://raw.githubusercontent.com/redlineal/amghost/master/configs"
+PANEL_URL="https://github.com/pterodactyl/panel/releases/download/$VERSION/panel.tar.gz"
+CONFIGS_URL="https://raw.githubusercontent.com/VilhelmPrytz/pterodactyl-installer/master/configs"
 
 # apt sources path
 SOURCES_PATH="/etc/apt/sources.list"
@@ -138,10 +140,10 @@ function check_os_comp {
   elif [ "$OS" == "centos" ]; then
     if [ "$OS_VER_MAJOR" == "7" ]; then
       SUPPORTED=true
-      PHP_SOCKET="/var/run/php-fpm/amghost.sock"
+      PHP_SOCKET="/var/run/php-fpm/pterodactyl.sock"
     elif [ "$OS_VER_MAJOR" == "8" ]; then
       SUPPORTED=true
-      PHP_SOCKET="/var/run/php-fpm/amhost.sock"
+      PHP_SOCKET="/var/run/php-fpm/pterodactyl.sock"
     else
       SUPPORTED=false
     fi
@@ -170,9 +172,9 @@ function install_composer {
 }
 
 function ptdl_dl {
-  echo "* Downloading amghost panel files .. "
-  mkdir -p /var/www/html/amghost
-  cd /var/www/html/amghost || exit
+  echo "* Downloading pterodactyl panel files .. "
+  mkdir -p /var/www/pterodactyl
+  cd /var/www/pterodactyl || exit
 
   curl -Lo panel.tar.gz "$PANEL_URL"
   tar --strip-components=1 -xzvf panel.tar.gz
@@ -182,7 +184,7 @@ function ptdl_dl {
   composer install --no-dev --optimize-autoloader
 
   php artisan key:generate --force
-  echo "* Downloaded amghost panel files & installed composer dependencies!"
+  echo "* Downloaded pterodactyl panel files & installed composer dependencies!"
 }
 
 function configure {
@@ -233,7 +235,7 @@ function set_folder_permissions {
 function insert_cronjob {
   echo "* Installing cronjob.. "
 
-  crontab -l | { cat; echo "* * * * * php /var/www/html/amghost/artisan schedule:run >> /dev/null 2>&1"; } | crontab -
+  crontab -l | { cat; echo "* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1"; } | crontab -
 
   echo "* Cronjob installed!"
 }
@@ -261,7 +263,7 @@ function create_database {
 
     mysql_secure_installation
 
-    echo "* The script should have asked you to set the MySQL root password earlier (not to be confused with the amghost database user password)"
+    echo "* The script should have asked you to set the MySQL root password earlier (not to be confused with the pterodactyl database user password)"
     echo "* MySQL will now ask you to enter the password before each command."
 
     echo "* Create MySQL user."
@@ -468,7 +470,7 @@ function ubuntu_universedep {
 }
 
 function centos_php {
-  curl -o /etc/php-fpm.d/www-amghost.conf $CONFIGS_URL/www-amghost.conf
+  curl -o /etc/php-fpm.d/www-pterodactyl.conf $CONFIGS_URL/www-pterodactyl.conf
 
   systemctl enable php-fpm
   systemctl start php-fpm
@@ -493,28 +495,28 @@ function configure_nginx {
       rm -rf /etc/nginx/conf.d/default
 
       # download new config
-      curl -o /etc/nginx/conf.d/amghost.conf $CONFIGS_URL/$DL_FILE
+      curl -o /etc/nginx/conf.d/pterodactyl.conf $CONFIGS_URL/$DL_FILE
 
       # replace all <domain> places with the correct domain
-      sed -i -e "s@<domain>@${FQDN}@g" /etc/nginx/conf.d/amghost.conf
+      sed -i -e "s@<domain>@${FQDN}@g" /etc/nginx/conf.d/pterodactyl.conf
 
       # replace all <php_socket> places with correct socket "path"
-      sed -i -e "s@<php_socket>@${PHP_SOCKET}@g" /etc/nginx/conf.d/amghost.conf
+      sed -i -e "s@<php_socket>@${PHP_SOCKET}@g" /etc/nginx/conf.d/pterodactyl.conf
   else
       # remove default config
       rm -rf /etc/nginx/sites-enabled/default
 
       # download new config
-      curl -o /etc/nginx/sites-available/amghost.conf $CONFIGS_URL/$DL_FILE
+      curl -o /etc/nginx/sites-available/pterodactyl.conf $CONFIGS_URL/$DL_FILE
 
       # replace all <domain> places with the correct domain
-      sed -i -e "s@<domain>@${FQDN}@g" /etc/nginx/sites-available/amghost.conf
+      sed -i -e "s@<domain>@${FQDN}@g" /etc/nginx/sites-available/pterodactyl.conf
 
       # replace all <php_socket> places with correct socket "path"
-      sed -i -e "s@<php_socket>@${PHP_SOCKET}@g" /etc/nginx/sites-available/amghost.conf
+      sed -i -e "s@<php_socket>@${PHP_SOCKET}@g" /etc/nginx/sites-available/pterodactyl.conf
 
-      # enable amghost
-      sudo ln -s /etc/nginx/sites-available/amghost.conf /etc/nginx/sites-enabled/amghost.conf
+      # enable pterodactyl
+      sudo ln -s /etc/nginx/sites-available/pterodactyl.conf /etc/nginx/sites-enabled/pterodactyl.conf
   fi
 
   # restart nginx
@@ -600,7 +602,7 @@ function main {
   detect_distro
 
   print_brake 40
-  echo "* AMGHOST panel installation script "
+  echo "* Pterodactyl panel installation script "
   echo "* Running $OS version $OS_VER."
   print_brake 40
 
@@ -612,7 +614,7 @@ function main {
 
   echo ""
 
-  echo -n "* Select webserver to install Amghost panel with: "
+  echo -n "* Select webserver to install pterodactyl panel with: "
   read -r WEBSERVER_INPUT
 
   if [ "$WEBSERVER_INPUT" == "1" ]; then
@@ -641,11 +643,11 @@ function main {
     MYSQL_DB=$MYSQL_DB_INPUT
   fi
 
-  echo -n "* Username (amghost): "
+  echo -n "* Username (pterodactyl): "
   read -r MYSQL_USER_INPUT
 
   if [ -z "$MYSQL_USER_INPUT" ]; then
-    MYSQL_USER="amghost"
+    MYSQL_USER="pterodactyl"
   else
     MYSQL_USER=$MYSQL_USER_INPUT
   fi
@@ -699,7 +701,7 @@ function main {
 
 function goodbye {
   print_brake 62
-  echo "* AMGHOST Panel successfully installed @ $FQDN"
+  echo "* Pterodactyl Panel successfully installed @ $FQDN"
   echo "* "
   echo "* Installation is using $WEBSERVER on $OS"
   echo "* Thank you for using this script."
