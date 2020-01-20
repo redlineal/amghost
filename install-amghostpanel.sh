@@ -32,23 +32,6 @@ CONFIGS_URL="https://raw.githubusercontent.com/redlineal/amghost/master/configs"
 # apt sources path
 SOURCES_PATH="/etc/apt/sources.list"
 
-# visual functions
-function print_error {
-  COLOR_RED='\033[0;31m'
-  COLOR_NC='\033[0m'
-
-  echo ""
-  echo -e "* ${COLOR_RED}ERROR${COLOR_NC}: $1"
-  echo ""
-}
-
-function print_brake {
-  for ((n=0;n<$1;n++));
-    do
-      echo -n "#"
-    done
-    echo ""
-}
 
 # other functions
 function detect_distro {
