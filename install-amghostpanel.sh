@@ -1,15 +1,4 @@
 #!/bin/bash
-
-########################################################################
-#                                                                      #
-# Project 'amghost-installer' for panel                                #
-#                                                                      #
-# Copyright (C) 2020, Lirim ZM, <lirimzm@yahoo.com>                    #
-#                                                                      #
-# https://fb.com/lirim.zm.1                                            #
-#                                                                      #
-########################################################################
-
 # exit with error status code if user is not root
 if [[ $EUID -ne 0 ]]; then
   echo "* This script must be executed with root privileges (sudo)." 1>&2
@@ -24,18 +13,6 @@ if [ -z "$CURLPATH" ]; then
     exit 1
 fi
 
-# define version using information from GitHub
-get_latest_release() {
-  curl --silent "https://api.github.com/repos/redlineal/amghost/releases/latest" | # Get latest release from GitHub api
-    grep '"tag_name":' |                                            # Get tag line
-    sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
-}
-
-echo "* Retrieving release information.."
-VERSION="$(get_latest_release "redlineal/amghost")"
-
-echo "* Latest version is $VERSION"
-
 # variables
 WEBSERVER="nginx"
 FQDN="amghost.panel"
@@ -49,7 +26,7 @@ MYSQL_PASSWORD="password"
 ASSUME_SSL=false
 
 # download URLs
-PANEL_URL="https://github.com/redlineal/paneli/releases/download/$VERSION/panel.tar.gz"
+PANEL_URL="https://github.com/redlineal/amghost/releases/download/v1.0/panel.tar.gz"
 CONFIGS_URL="https://raw.githubusercontent.com/redlineal/amghost/master/configs"
 
 # apt sources path
@@ -79,7 +56,6 @@ function detect_distro {
     # freedesktop.org and systemd
     . /etc/os-release
     OS=$(echo "$ID" | awk '{print tolower($0)}')
-    OS_VER=$VERSION_ID
   elif type lsb_release >/dev/null 2>&1; then
     # linuxbase.org
     OS=$(lsb_release -si | awk '{print tolower($0)}')
