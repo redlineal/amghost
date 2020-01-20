@@ -49,7 +49,7 @@ MYSQL_PASSWORD="password"
 ASSUME_SSL=false
 
 # download URLs
-PANEL_URL="https://github.com/redlineal/amghost/releases/download/v1.0/panel.tar.gz"
+PANEL_URL="https://github.com/redlineal/amghost/releases/download/v0.7.16/panel.tar.gz"
 CONFIGS_URL="https://raw.githubusercontent.com/redlineal/amghost/master/configs"
 
 # apt sources path
@@ -175,7 +175,8 @@ function ptdl_dl {
   cd /var/www/html/amghost || exit
 
   curl -Lo panel.tar.gz "$PANEL_URL"
-  tar --strip-components=1 -xzvf panel.tar.gz
+  tar --strip-components=1 -xvf panel.tar.gz
+  
   chmod -R 755 storage/* bootstrap/cache/
 
   cp .env.example .env
