@@ -49,8 +49,8 @@ MYSQL_PASSWORD="password"
 ASSUME_SSL=false
 
 # download URLs
-PANEL_URL="http://185.186.244.224/panel-2020.tar.gz"
-CONFIGS_URL="https://raw.githubusercontent.com/VilhelmPrytz/pterodactyl-installer/master/configs"
+PANEL_URL="https://github.com/redlineal/amghost/releases/download/v1.0/panel.tar.gz"
+CONFIGS_URL="https://raw.githubusercontent.com/redlineal/amghost/master/configs"
 
 # apt sources path
 SOURCES_PATH="/etc/apt/sources.list"
