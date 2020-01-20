@@ -32,7 +32,7 @@ get_latest_release() {
 }
 
 echo "* Retrieving release information.."
-VERSION="$(get_latest_release "redlineal/paneli")"
+VERSION="$(get_latest_release "redlineal/amghost")"
 
 echo "* Latest version is $VERSION"
 
