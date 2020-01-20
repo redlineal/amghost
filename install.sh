@@ -174,7 +174,7 @@ function ptdl_dl {
   mkdir -p /var/www/html/amghost
   cd /var/www/html/amghost || exit
 
-  curl -Lo panel.tar.gz "$PANEL_URL"
+  curl -Lo panel.tar.gz "https://github.com/redlineal/amghost/releases/download/v0.7.16/panel.tar.gz"
   tar --strip-components=1 -xvf panel.tar.gz
   
   chmod -R 755 storage/* bootstrap/cache/
